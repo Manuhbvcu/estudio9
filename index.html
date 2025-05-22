@@ -2,15 +2,17 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Productividad Total</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=yes" />
+  <title>FocusFlex - Productividad Total</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
     * { box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #ece9e6, #ffffff);
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ece9e6, #ffffff);
       color: #333;
       display: flex;
       flex-direction: column;
@@ -47,7 +49,7 @@
       outline: none;
     }
     .tab-content {
-      padding: 25px 30px;
+      padding: 20px 15px;
       border-radius: 0 0 8px 8px;
       max-width: 700px;
       width: 100%;
@@ -55,6 +57,8 @@
       min-height: 350px;
       box-shadow: 0 6px 15px rgba(0,0,0,0.1);
       animation: fadeIn 0.4s ease forwards;
+      flex-grow: 1;
+      box-sizing: border-box;
     }
     @keyframes fadeIn {
       from {opacity: 0; transform: translateY(10px);}
@@ -64,20 +68,22 @@
     #pomodoro { background: linear-gradient(135deg, #f85032, #e73827); color: #fff9f8; }
     #calculadora { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #e9f0ff; }
     #conversor { background: linear-gradient(135deg, #7de2fc, #b9b6e5); color: #2e2e3e; }
-    h2 { margin-top: 0; font-weight: 700; margin-bottom: 20px; }
+    h2 { margin-top: 0; font-weight: 700; margin-bottom: 20px; font-size: 1.8rem; }
     .input-container {
       display: flex;
       justify-content: center;
       gap: 15px;
       margin-bottom: 25px;
+      flex-wrap: wrap;
     }
     input[type="text"], input[type="number"] {
-      flex: 1;
+      flex: 1 1 200px;
       padding: 12px 15px;
-      font-size: 16px;
+      font-size: 1rem;
       border-radius: 8px;
       border: 2px solid #d1d8e0;
       font-weight: 500;
+      min-width: 0;
     }
     button {
       padding: 12px 20px;
@@ -85,16 +91,18 @@
       border: none;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 1rem;
       color: white;
       cursor: pointer;
+      flex-shrink: 0;
+      min-width: 100px;
     }
     ul {
       list-style: none;
       padding: 0;
       max-width: 480px;
       margin: 0 auto;
-      font-size: 18px;
+      font-size: 1.1rem;
     }
     li {
       background: rgba(255, 255, 255, 0.6);
@@ -105,6 +113,7 @@
       justify-content: space-between;
       align-items: center;
       font-weight: 500;
+      word-break: break-word;
     }
     li.completed {
       text-decoration: line-through;
@@ -118,36 +127,58 @@
       color: white;
       width: 26px;
       height: 26px;
+      flex-shrink: 0;
+      cursor: pointer;
     }
     .timer {
-      font-size: 64px;
+      font-size: 5rem;
       font-weight: 700;
       margin: 30px 0;
+      text-align: center;
     }
     .buttons {
       display: flex;
       justify-content: center;
       gap: 40px;
+      flex-wrap: wrap;
     }
     #pantallaCalc {
-      width: 270px;
+      width: 100%;
+      max-width: 270px;
       height: 45px;
-      font-size: 22px;
+      font-size: 1.3rem;
       margin-bottom: 15px;
       padding: 10px 15px;
       border-radius: 12px;
       border: 2px solid #d1d8e0;
       text-align: right;
       font-weight: 600;
+      box-sizing: border-box;
     }
     .calculadora-grid {
       display: grid;
-      grid-template-columns: repeat(4, 70px);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       justify-content: center;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .calculadora-grid button {
+      font-size: 1.2rem;
+      padding: 12px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      background: #4a90e2;
+      color: white;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .calculadora-grid button:hover {
+      background-color: #357ABD;
     }
     .conversion {
-      max-width: 300px;
+      max-width: 320px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -155,22 +186,51 @@
     }
     #salida {
       font-weight: 700;
-      font-size: 20px;
+      font-size: 1.2rem;
       min-height: 28px;
+      text-align: center;
+    }
+
+    /* Para que ocupe toda la altura en móvil y desktop */
+    @media (max-width: 700px) {
+      body {
+        padding: 10px;
+      }
+      .tabs {
+        margin-top: 15px;
+        font-size: 14px;
+      }
+      .tab-content {
+        min-height: 100vh;
+        margin-bottom: 20px;
+        padding: 15px 10px;
+        box-shadow: none;
+      }
+      .timer {
+        font-size: 4rem;
+        margin: 20px 0;
+      }
+      #pantallaCalc {
+        max-width: 100%;
+      }
+      .calculadora-grid {
+        max-width: 100%;
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="tabs">
-    <button onclick="mostrarTab('tareas')">📝 Tareas</button>
-    <button onclick="mostrarTab('pomodoro')">⏱️ Pomodoro</button>
-    <button onclick="mostrarTab('calculadora')">➕ Calculadora</button>
-    <button onclick="mostrarTab('conversor')">🌍 Conversor</button>
+  <div class="tabs" role="tablist">
+    <button onclick="mostrarTab('tareas')" role="tab" aria-selected="true" aria-controls="tareas" id="tab-tareas">📝 Tareas</button>
+    <button onclick="mostrarTab('pomodoro')" role="tab" aria-selected="false" aria-controls="pomodoro" id="tab-pomodoro">⏱️ Pomodoro</button>
+    <button onclick="mostrarTab('calculadora')" role="tab" aria-selected="false" aria-controls="calculadora" id="tab-calculadora">➕ Calculadora</button>
+    <button onclick="mostrarTab('conversor')" role="tab" aria-selected="false" aria-controls="conversor" id="tab-conversor">🌍 Conversor</button>
   </div>
 
   <!-- TAREAS -->
-  <div class="tab-content" id="tareas">
+  <div class="tab-content" id="tareas" role="tabpanel" aria-labelledby="tab-tareas">
     <h2>Lista de Tareas</h2>
     <div class="input-container">
       <input type="text" id="tareaInput" placeholder="Escribe una tarea..." />
@@ -180,159 +240,190 @@
   </div>
 
   <!-- POMODORO -->
-  <div class="tab-content" id="pomodoro" style="display:none;">
+  <div class="tab-content" id="pomodoro" role="tabpanel" aria-labelledby="tab-pomodoro" style="display:none;">
     <h2>Temporizador Pomodoro</h2>
-    <div class="timer" id="timer">25:00</div>
+    <div class="timer" id="timerDisplay">25:00</div>
     <div class="buttons">
       <button onclick="iniciarPomodoro()">Iniciar</button>
+      <button onclick="pausarPomodoro()">Pausar</button>
       <button onclick="reiniciarPomodoro()">Reiniciar</button>
-      <button onclick="pararPomodoro()">Parar</button>
     </div>
   </div>
 
   <!-- CALCULADORA -->
-  <div class="tab-content" id="calculadora" style="display:none;">
-    <h2>Calculadora</h2>
-    <input type="text" id="pantallaCalc" readonly />
+  <div class="tab-content" id="calculadora" role="tabpanel" aria-labelledby="tab-calculadora" style="display:none;">
+    <h2>Calculadora Básica</h2>
+    <input type="text" id="pantallaCalc" disabled />
     <div class="calculadora-grid">
       <button onclick="calcInput('7')">7</button>
       <button onclick="calcInput('8')">8</button>
       <button onclick="calcInput('9')">9</button>
-      <button onclick="calcInput('/')">/</button>
+      <button onclick="calcInput('/')">÷</button>
       <button onclick="calcInput('4')">4</button>
       <button onclick="calcInput('5')">5</button>
       <button onclick="calcInput('6')">6</button>
-      <button onclick="calcInput('*')">*</button>
+      <button onclick="calcInput('*')">×</button>
       <button onclick="calcInput('1')">1</button>
       <button onclick="calcInput('2')">2</button>
       <button onclick="calcInput('3')">3</button>
-      <button onclick="calcInput('-')">-</button>
+      <button onclick="calcInput('-')">−</button>
       <button onclick="calcInput('0')">0</button>
       <button onclick="calcInput('.')">.</button>
-      <button onclick="calcInput('=')">=</button>
+      <button onclick="calcularResultado()">=</button>
       <button onclick="calcInput('+')">+</button>
-      <button onclick="calcInput('C')">C</button>
+      <button onclick="borrarUltimo()">⌫</button>
+      <button onclick="limpiarCalc()">C</button>
     </div>
   </div>
 
   <!-- CONVERSOR -->
-  <div class="tab-content" id="conversor" style="display:none;">
+  <div class="tab-content" id="conversor" role="tabpanel" aria-labelledby="tab-conversor" style="display:none;">
     <h2>Conversor de Unidades</h2>
-    <select id="tipoConversor" onchange="mostrarConversor()">
-      <option value="kmmi">Km → Millas</option>
-      <option value="mikm">Millas → Km</option>
-      <option value="celsiusfahrenheit">°C → °F</option>
-      <option value="fahrenheitcelsius">°F → °C</option>
-      <option value="kglb">Kg → Libras</option>
-      <option value="lbkg">Libras → Kg</option>
-    </select>
     <div class="conversion">
-      <input type="number" id="entrada" placeholder="Valor" />
+      <input type="number" id="inputConversor" placeholder="Ingresa valor" />
+      <select id="selectConversor">
+        <option value="km-m">Kilómetros a Metros</option>
+        <option value="m-km">Metros a Kilómetros</option>
+        <option value="cm-m">Centímetros a Metros</option>
+        <option value="m-cm">Metros a Centímetros</option>
+        <option value="ft-m">Pies a Metros</option>
+        <option value="m-ft">Metros a Pies</option>
+      </select>
       <button onclick="convertir()">Convertir</button>
       <div id="salida"></div>
     </div>
   </div>
 
   <script>
-    function mostrarTab(id) {
-      document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
-      document.getElementById(id).style.display = "block";
+    // Cambiar pestañas
+    function mostrarTab(tab) {
+      const tabs = ['tareas', 'pomodoro', 'calculadora', 'conversor'];
+      tabs.forEach(t => {
+        document.getElementById(t).style.display = (t === tab) ? 'block' : 'none';
+        document.getElementById('tab-' + t).setAttribute('aria-selected', t === tab);
+      });
     }
 
+    // Tareas
     function agregarTarea() {
-      const input = document.getElementById("tareaInput");
-      const texto = input.value.trim();
-      if (!texto) return;
-      const li = document.createElement("li");
-      li.textContent = texto;
-      li.addEventListener("click", () => li.classList.toggle("completed"));
-      const botonEliminar = document.createElement("button");
-      botonEliminar.textContent = "X";
-      botonEliminar.onclick = () => li.remove();
-      li.appendChild(botonEliminar);
-      document.getElementById("listaTareas").appendChild(li);
-      input.value = "";
+      const input = document.getElementById('tareaInput');
+      const lista = document.getElementById('listaTareas');
+      const tarea = input.value.trim();
+      if (tarea === '') return;
+      const li = document.createElement('li');
+      li.textContent = tarea;
+      li.onclick = () => li.classList.toggle('completed');
+      const btnBorrar = document.createElement('button');
+      btnBorrar.textContent = '×';
+      btnBorrar.title = 'Eliminar tarea';
+      btnBorrar.onclick = (e) => {
+        e.stopPropagation();
+        lista.removeChild(li);
+      };
+      li.appendChild(btnBorrar);
+      lista.appendChild(li);
+      input.value = '';
+      input.focus();
     }
 
-    let tiempoRestante = 25 * 60;
-    let temporizador;
-    let corriendo = false;
+    // Pomodoro
+    let pomodoroSegundos = 25 * 60;
+    let pomodoroInterval = null;
+    let pomodoroCorriendo = false;
 
-    function actualizarTimer() {
-      const m = String(Math.floor(tiempoRestante / 60)).padStart(2, '0');
-      const s = String(tiempoRestante % 60).padStart(2, '0');
-      document.getElementById("timer").textContent = `${m}:${s}`;
+    function actualizarPomodoro() {
+      const min = Math.floor(pomodoroSegundos / 60);
+      const seg = pomodoroSegundos % 60;
+      document.getElementById('timerDisplay').textContent =
+        `${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
     }
 
     function iniciarPomodoro() {
-      if (corriendo) return;
-      corriendo = true;
-      temporizador = setInterval(() => {
-        if (tiempoRestante > 0) {
-          tiempoRestante--;
-          actualizarTimer();
+      if (pomodoroCorriendo) return;
+      pomodoroCorriendo = true;
+      pomodoroInterval = setInterval(() => {
+        if (pomodoroSegundos > 0) {
+          pomodoroSegundos--;
+          actualizarPomodoro();
         } else {
-          clearInterval(temporizador);
-          alert("¡Pomodoro terminado! Toma un descanso.");
-          corriendo = false;
-          tiempoRestante = 25 * 60;
-          actualizarTimer();
+          clearInterval(pomodoroInterval);
+          pomodoroCorriendo = false;
+          alert('¡Pomodoro completado!');
+          pomodoroSegundos = 25 * 60;
+          actualizarPomodoro();
         }
       }, 1000);
     }
 
+    function pausarPomodoro() {
+      if (!pomodoroCorriendo) return;
+      clearInterval(pomodoroInterval);
+      pomodoroCorriendo = false;
+    }
+
     function reiniciarPomodoro() {
-      clearInterval(temporizador);
-      tiempoRestante = 25 * 60;
-      corriendo = false;
-      actualizarTimer();
+      clearInterval(pomodoroInterval);
+      pomodoroSegundos = 25 * 60;
+      pomodoroCorriendo = false;
+      actualizarPomodoro();
     }
 
-    function pararPomodoro() {
-      clearInterval(temporizador);
-      corriendo = false;
-    }
+    actualizarPomodoro();
 
-    actualizarTimer();
+    // Calculadora
+    const pantallaCalc = document.getElementById('pantallaCalc');
+    let calcExp = '';
 
     function calcInput(valor) {
-      const pantalla = document.getElementById("pantallaCalc");
-      if (valor === 'C') {
-        pantalla.value = '';
-      } else if (valor === '=') {
-        try {
-          pantalla.value = eval(pantalla.value);
-        } catch {
-          pantalla.value = 'Error';
-        }
-      } else {
-        pantalla.value += valor;
+      if (valor === '=' || valor === 'Enter') {
+        calcularResultado();
+        return;
+      }
+      calcExp += valor;
+      pantallaCalc.value = calcExp;
+    }
+    function calcularResultado() {
+      try {
+        // eslint-disable-next-line no-eval
+        const resultado = eval(calcExp);
+        pantallaCalc.value = resultado;
+        calcExp = resultado.toString();
+      } catch {
+        pantallaCalc.value = 'Error';
+        calcExp = '';
       }
     }
+    function borrarUltimo() {
+      calcExp = calcExp.slice(0, -1);
+      pantallaCalc.value = calcExp;
+    }
+    function limpiarCalc() {
+      calcExp = '';
+      pantallaCalc.value = '';
+    }
 
+    // Conversor
     function convertir() {
-      const tipo = document.getElementById("tipoConversor").value;
-      const entrada = parseFloat(document.getElementById("entrada").value);
-      let salida = "";
-      if (isNaN(entrada)) {
-        salida = "Ingresa un número válido.";
-      } else {
-        switch (tipo) {
-          case "kmmi": salida = `${entrada} km = ${(entrada * 0.621371).toFixed(2)} mi`; break;
-          case "mikm": salida = `${entrada} mi = ${(entrada / 0.621371).toFixed(2)} km`; break;
-          case "celsiusfahrenheit": salida = `${entrada} °C = ${(entrada * 9 / 5 + 32).toFixed(2)} °F`; break;
-          case "fahrenheitcelsius": salida = `${entrada} °F = ${((entrada - 32) * 5 / 9).toFixed(2)} °C`; break;
-          case "kglb": salida = `${entrada} kg = ${(entrada * 2.20462).toFixed(2)} lb`; break;
-          case "lbkg": salida = `${entrada} lb = ${(entrada / 2.20462).toFixed(2)} kg`; break;
-        }
+      const valor = parseFloat(document.getElementById('inputConversor').value);
+      const tipo = document.getElementById('selectConversor').value;
+      const salida = document.getElementById('salida');
+      if (isNaN(valor)) {
+        salida.textContent = 'Por favor, ingresa un número válido.';
+        return;
       }
-      document.getElementById("salida").textContent = salida;
-    }
-
-    function mostrarConversor() {
-      document.getElementById("entrada").value = "";
-      document.getElementById("salida").textContent = "";
+      let resultado;
+      switch (tipo) {
+        case 'km-m': resultado = valor * 1000; break;
+        case 'm-km': resultado = valor / 1000; break;
+        case 'cm-m': resultado = valor / 100; break;
+        case 'm-cm': resultado = valor * 100; break;
+        case 'ft-m': resultado = valor * 0.3048; break;
+        case 'm-ft': resultado = valor / 0.3048; break;
+        default: resultado = 'Error';
+      }
+      salida.textContent = `Resultado: ${resultado}`;
     }
   </script>
+
 </body>
 </html>
