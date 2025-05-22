@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Productividad Total</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ece9e6, #ffffff);
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      background: #4a90e2;
+      box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+      width: 100%;
+      max-width: 700px;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+      margin-top: 30px;
+    }
+    .tabs button {
+      flex: 1 1 25%;
+      padding: 15px 0;
+      font-weight: 600;
+      font-size: 16px;
+      color: #dbe9ff;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+    .tabs button:hover,
+    .tabs button:focus {
+      background-color: #357ABD;
+      color: #fff;
+      outline: none;
+    }
+    .tab-content {
+      padding: 25px 30px;
+      border-radius: 0 0 8px 8px;
+      max-width: 700px;
+      width: 100%;
+      margin-bottom: 40px;
+      min-height: 350px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      animation: fadeIn 0.4s ease forwards;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    #tareas { background: linear-gradient(135deg, #fceabb, #f8b500); color: #5a3e00; }
+    #pomodoro { background: linear-gradient(135deg, #f85032, #e73827); color: #fff9f8; }
+    #calculadora { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #e9f0ff; }
+    #conversor { background: linear-gradient(135deg, #7de2fc, #b9b6e5); color: #2e2e3e; }
+    h2 { margin-top: 0; font-weight: 700; margin-bottom: 20px; }
+    .input-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    input[type="text"], input[type="number"] {
+      flex: 1;
+      padding: 12px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 2px solid #d1d8e0;
+      font-weight: 500;
+    }
+    button {
+      padding: 12px 20px;
+      background: #4a90e2;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      font-size: 18px;
+    }
+    li {
+      background: rgba(255, 255, 255, 0.6);
+      margin: 10px 0;
+      padding: 15px 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+    li.completed {
+      text-decoration: line-through;
+      color: #8a99a6;
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+    li button {
+      background: #ff6b6b;
+      border-radius: 50%;
+      border: none;
+      color: white;
+      width: 26px;
+      height: 26px;
+    }
+    .timer {
+      font-size: 64px;
+      font-weight: 700;
+      margin: 30px 0;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+    #pantallaCalc {
+      width: 270px;
+      height: 45px;
+      font-size: 22px;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 12px;
+      border: 2px solid #d1d8e0;
+      text-align: right;
+      font-weight: 600;
+    }
+    .calculadora-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 70px);
+      gap: 12px;
+      justify-content: center;
+    }
+    .conversion {
+      max-width: 300px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    #salida {
+      font-weight: 700;
+      font-size: 20px;
+      min-height: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tabs">
+    <button onclick="mostrarTab('tareas')">📝 Tareas</button>
+    <button onclick="mostrarTab('pomodoro')">⏱️ Pomodoro</button>
+    <button onclick="mostrarTab('calculadora')">➕ Calculadora</button>
+    <button onclick="mostrarTab('conversor')">🌍 Conversor</button>
+  </div>
+
+  <!-- TAREAS -->
+  <div class="tab-content" id="tareas">
+    <h2>Lista de Tareas</h2>
+    <div class="input-container">
+      <input type="text" id="tareaInput" placeholder="Escribe una tarea..." />
+      <button onclick="agregarTarea()">Agregar</button>
+    </div>
+    <ul id="listaTareas"></ul>
+  </div>
+
+  <!-- POMODORO -->
+  <div class="tab-content" id="pomodoro" style="display:none;">
+    <h2>Temporizador Pomodoro</h2>
+    <div class="timer" id="timer">25:00</div>
+    <div class="buttons">
+      <button onclick="iniciarPomodoro()">Iniciar</button>
+      <button onclick="reiniciarPomodoro()">Reiniciar</button>
+      <button onclick="pararPomodoro()">Parar</button>
+    </div>
+  </div>
+
+  <!-- CALCULADORA -->
+  <div class="tab-content" id="calculadora" style="display:none;">
+    <h2>Calculadora</h2>
+    <input type="text" id="pantallaCalc" readonly />
+    <div class="calculadora-grid">
+      <button onclick="calcInput('7')">7</button>
+      <button onclick="calcInput('8')">8</button>
+      <button onclick="calcInput('9')">9</button>
+      <button onclick="calcInput('/')">/</button>
+      <button onclick="calcInput('4')">4</button>
+      <button onclick="calcInput('5')">5</button>
+      <button onclick="calcInput('6')">6</button>
+      <button onclick="calcInput('*')">*</button>
+      <button onclick="calcInput('1')">1</button>
+      <button onclick="calcInput('2')">2</button>
+      <button onclick="calcInput('3')">3</button>
+      <button onclick="calcInput('-')">-</button>
+      <button onclick="calcInput('0')">0</button>
+      <button onclick="calcInput('.')">.</button>
+      <button onclick="calcInput('=')">=</button>
+      <button onclick="calcInput('+')">+</button>
+      <button onclick="calcInput('C')">C</button>
+    </div>
+  </div>
+
+  <!-- CONVERSOR -->
+  <div class="tab-content" id="conversor" style="display:none;">
+    <h2>Conversor de Unidades</h2>
+    <select id="tipoConversor" onchange="mostrarConversor()">
+      <option value="kmmi">Km → Millas</option>
+      <option value="mikm">Millas → Km</option>
+      <option value="celsiusfahrenheit">°C → °F</option>
+      <option value="fahrenheitcelsius">°F → °C</option>
+      <option value="kglb">Kg → Libras</option>
+      <option value="lbkg">Libras → Kg</option>
+    </select>
+    <div class="conversion">
+      <input type="number" id="entrada" placeholder="Valor" />
+      <button onclick="convertir()">Convertir</button>
+      <div id="salida"></div>
+    </div>
+  </div>
+
+  <script>
+    function mostrarTab(id) {
+      document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+      document.getElementById(id).style.display = "block";
+    }
+
+    function agregarTarea() {
+      const input = document.getElementById("tareaInput");
+      const texto = input.value.trim();
+      if (!texto) return;
+      const li = document.createElement("li");
+      li.textContent = texto;
+      li.addEventListener("click", () => li.classList.toggle("completed"));
+      const botonEliminar = document.createElement("button");
+      botonEliminar.textContent = "X";
+      botonEliminar.onclick = () => li.remove();
+      li.appendChild(botonEliminar);
+      document.getElementById("listaTareas").appendChild(li);
+      input.value = "";
+    }
+
+    let tiempoRestante = 25 * 60;
+    let temporizador;
+    let corriendo = false;
+
+    function actualizarTimer() {
+      const m = String(Math.floor(tiempoRestante / 60)).padStart(2, '0');
+      const s = String(tiempoRestante % 60).padStart(2, '0');
+      document.getElementById("timer").textContent = `${m}:${s}`;
+    }
+
+    function iniciarPomodoro() {
+      if (corriendo) return;
+      corriendo = true;
+      temporizador = setInterval(() => {
+        if (tiempoRestante > 0) {
+          tiempoRestante--;
+          actualizarTimer();
+        } else {
+          clearInterval(temporizador);
+          alert("¡Pomodoro terminado! Toma un descanso.");
+          corriendo = false;
+          tiempoRestante = 25 * 60;
+          actualizarTimer();
+        }
+      }, 1000);
+    }
+
+    function reiniciarPomodoro() {
+      clearInterval(temporizador);
+      tiempoRestante = 25 * 60;
+      corriendo = false;
+      actualizarTimer();
+    }
+
+    function pararPomodoro() {
+      clearInterval(temporizador);
+      corriendo = false;
+    }
+
+    actualizarTimer();
+
+    function calcInput(valor) {
+      const pantalla = document.getElementById("pantallaCalc");
+      if (valor === 'C') {
+        pantalla.value = '';
+      } else if (valor === '=') {
+        try {
+          pantalla.value = eval(pantalla.value);
+        } catch {
+          pantalla.value = 'Error';
+        }
+      } else {
+        pantalla.value += valor;
+      }
+    }
+
+    function convertir() {
+      const tipo = document.getElementById("tipoConversor").value;
+      const entrada = parseFloat(document.getElementById("entrada").value);
+      let salida = "";
+      if (isNaN(entrada)) {
+        salida = "Ingresa un número válido.";
+      } else {
+        switch (tipo) {
+          case "kmmi": salida = `${entrada} km = ${(entrada * 0.621371).toFixed(2)} mi`; break;
+          case "mikm": salida = `${entrada} mi = ${(entrada / 0.621371).toFixed(2)} km`; break;
+          case "celsiusfahrenheit": salida = `${entrada} °C = ${(entrada * 9 / 5 + 32).toFixed(2)} °F`; break;
+          case "fahrenheitcelsius": salida = `${entrada} °F = ${((entrada - 32) * 5 / 9).toFixed(2)} °C`; break;
+          case "kglb": salida = `${entrada} kg = ${(entrada * 2.20462).toFixed(2)} lb`; break;
+          case "lbkg": salida = `${entrada} lb = ${(entrada / 2.20462).toFixed(2)} kg`; break;
+        }
+      }
+      document.getElementById("salida").textContent = salida;
+    }
+
+    function mostrarConversor() {
+      document.getElementById("entrada").value = "";
+      document.getElementById("salida").textContent = "";
+    }
+  </script>
+</body>
+</html>
